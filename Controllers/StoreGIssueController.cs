@@ -144,7 +144,7 @@ namespace RMS.Controllers
             {
                 Id = x.SGSId,
                 AccountGroupId = x.SGSId,
-                Name = x.ItemCode + " " + x.ItemName,
+                Name = x.ItemName,
                 Code = x.ItemCode,
                 Description = x.ItemName,
                 Unit = x.Unit,

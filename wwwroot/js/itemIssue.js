@@ -16,6 +16,7 @@ $(".onlyNumber").change(function (e) {
     }
 });
 
+
 function dateValue() {
     $.ajax({
         type: "GET",
@@ -100,9 +101,6 @@ function addItem() {
     );
     resetFrom();
 }
-
-
-
 function validationCheckForItem() {
 
     var response = true;
@@ -116,7 +114,6 @@ function validationCheckForItem() {
     showErrorMessageBelowCtrl('ddlitemName', 'Item Name is required', false);
     showErrorMessageBelowCtrl('gidQty', 'Quantity is required', false);
     showErrorMessageBelowCtrl('giduPrice', 'Unit Price is required', false);
-
 
     if (giduPrice == undefined || giduPrice.length <= 0) {
         showErrorMessageBelowCtrl('giduPrice', 'Unit is required', true); response = false;
@@ -158,7 +155,6 @@ function validationCheckForItem() {
 
     return response;
 }
-
 function resetFrom() {
     $('#itemCode').val("");
     $("#ddlitemName").val(-1).change();
@@ -206,8 +202,6 @@ $("#ddlitemName").change(function () {
 });
 
 
-
-
 function SaveRequest() {
     var result = validationCheck();
     if (result == false) { return; }
@@ -216,15 +210,15 @@ function SaveRequest() {
     data.append('GIMId', 0);
     data.append('GIMDate', $('#gimDate').val());
     data.append('HRDId', $('#ddldeptName').val());
-    data.append('GIMRemarks', $('#gimRemarks').val());
+    data.append('GIMRemarks', $('#gimRemarks').val()); 
 
     var tablelength = $('#tGLPostingListbody tr').length;
-    for (var i = 0; i < tablelength; i++) {
+    for (var i = 0; i < tablelength -1; i++) {
         itemList.push({
             gidId: Number($('#gidId' + i).val()) ?? 0,
             itemCode: $('#itemCode' + i).val(),
-            itemDescriptionId: $('#dditemName' + i).find(":selected").val(),
-            ddlitemName: $('#dditemName' + i).find(":selected").text(),
+            itemDescriptionId: $('#ddlitemName' + i).find(":selected").val(),
+            itemName: $('#ddlitemName' + i).find(":selected").text(),
             unit: $('#unit' + i).val(),
             gidQty: $('#gidQty' + i).val() ?? 0,
             giduPrice: $('#giduPrice' + i).val() ?? 0,
@@ -326,27 +320,51 @@ $('.print').click(function () {
 function getForEdit() {
     var url = window.location.href;
     var id = url.substring(url.lastIndexOf('=') + 1);
-    debugger
     $.ajax({
         type: "GET",
         url: "/StoreGIssue/GetById?id=" + id,
         data: "{}",
         success: function (data) {
+            allAccounts = data.allAccounts;
             let items = data.items;
+            rowIdx = 0;
             $('#tGLPostingListbody').empty();
             for (var i = 0; i < items.length; i++) {
                 $('#tGLPostingListbody').append(
-                    `<tr id="Item${++rowTableIdx}">
-                        <td hidden id="gidId${rowTableIdx}">` + 0 + `</td>
-                        <td id="itemCode${rowTableIdx}">` + objectItem.itemCode + `</td>
-                        <td hidden id="itemDescriptionId${rowTableIdx}">` + objectItem.itemDescriptionId + `</td>
-                        <td id="itemName${rowTableIdx}">` + objectItem.itemDescriptionText + `</td>
-                        <td id="unit${rowTableIdx}">` + objectItem.unit + `</td>
-                        <td id="gidQty${rowTableIdx}">` + objectItem.gidQty + `</td>
-                        <td id="giduPrice${rowTableIdx}">` + objectItem.giduPrice + `</td>
-                        <td id="gidtPrice${rowTableIdx}">` + objectItem.gidtPrice + `</td>
+                    `<tr id="R${rowIdx}">
+                        <td hidden>
+                            <input type="text" class="form-control" id="gidId${rowIdx}" />
+                        </td>
+                        <td>
+                            <input type="text" class="form-control codeChangesFromRow" id="itemCode${rowIdx}" />
+                        </td>
+                        <td>
+                            <select class="form-control accountChangesFromRow autoSuggestionSelect" id="ddlitemName${rowIdx}"><option selected>` + items[i].itemDescriptionId + `</option></select>
+                        </td>
+                        <td>
+                            <input type="text" class="form-control numbersOnly" placeholder="0.00" id="unit${rowIdx}" />
+                        </td>
+                        <td>
+                            <input type="text" class="form-control numbersOnly" placeholder="0.00" id="gidQty${rowIdx}" />
+                        </td>
+                        <td>
+                            <input type="text" class="form-control numbersOnly" placeholder="0.00" id="giduPrice${rowIdx}" />
+                        </td>
+                        <td>
+                            <input type="text" class="form-control numbersOnly" placeholder="0.00" id="gidTPrice${rowIdx}" />
+                        </td>
                         <td class="text-center">
-                            <button id="` + items[i].gimId + `" class="btn btn-sm btn-danger remove" type="button"><i class="fa fa-trash" aria-hidden="true"></i></button>
+                        <div id="addItem${rowIdx}" class="row">
+                            <a style="cursor:pointer" class="btn btn-primary add"><i class="bi bi-plus-circle"></i>add</a>
+                        </div>
+                            <div id="updateItem${rowIdx}" class="row">
+                                <button style='margin-left:2px' class="btn btn-sm  edit" type="button"><i class="fa-solid fa-pencil text-success" aria-hidden="true" title="Edit"></i></button>
+                                <button style='margin-left:2px' class="btn btn-sm  remove" type="button"><i class="fa-solid fa-xmark text-danger" aria-hidden="true" title="Delete"></i></button>
+                            </div>
+                            <div id="saveAsUpdatedItem${rowIdx}" class="row">
+                                <button style='margin-left:2px' class="btn btn-sm  sav" type="button"><i class="fa-solid fa-check text-success" aria-hidden="true" title="save"></i></button>
+                                <button style='margin-left:2px' class="btn btn-sm  can" type="button"><i class="fa-solid fa-xmark text-success" aria-hidden="true" title="cancel"></i></button>
+                            </div>
                         </td>
                     </tr>`
                 );
@@ -366,7 +384,7 @@ $('#updateButton').click(function () {
         itemList.push({
             gidId: $('#gidId' + i).text(),
             itemCode: $('#itemCode' + i).text(),
-            agtAccDescription: $('#itemName' + i).text(),
+            itemDescription: $('#itemName' + i).text(),
             unit: $('#unit' + i).text(),
             gidQty: $('#gidQty' + i).text(),
             giduPrice: $('#giduPrice' + i).text(),
@@ -451,21 +469,22 @@ function getAllIssueFromDB(parameter) {
             $("#ddlitemName" + parameter).append(o);
 
             for (var i = 0; i < subGroups.length; i++) {
-                var optgroup = "<optgroup label='" + subGroups[i].name + "'>";
+                var optgroup = "<optgroup >";
                 var data = accounts.filter(x => x.accountGroupId == subGroups[i].id);
                 for (var j = 0; j < data.length; j++) {
                     optgroup += "<option value='" + data[j].id + "'>" + data[j].name + "</option>"
                 }
-                optgroup += "</optgroup>";
+                 "</optgroup>";
                 $("#ddlitemName" + parameter).append(optgroup);
             }
         }
     });
 }
+
 $('#tGLPostingListbody').on('change',
     '.accountChangesFromRow',
     function () {
-        let getDomId = $(this).attr('id');
+        let getDomId = $(this).attr('id'); 
         var rowTrackId = getDomId.slice(11);
         var value = $("#ddlitemName" + rowTrackId).val();
         if (value != null) {
@@ -474,10 +493,12 @@ $('#tGLPostingListbody').on('change',
             if (account != undefined) {
                 $('#itemCode' + rowTrackId).val(account.code);
                 $('#unit' + rowTrackId).val(account.unit);
+                $('#giduPrice' + rowTrackId).val(account.price);
             }
             else {
                 $('#itemCode' + rowTrackId).val();
                 $('#unit' + rowTrackId).val();
+                $('#giduPrice' + rowTrackId).val();
             }
         }
     });
@@ -499,16 +520,27 @@ $('#tGLPostingListbody').on('change',
             }
         }
     });
+
 $('#tGLPostingListbody').on('click', '.add', function () {
 
     let getDomId = $(this).closest('tr').attr('id');
     rowIdx = parseInt(getDomId.slice(1));
-
-    rowIdx += 1;
-    $('#tGLPostingListbody').append(`
+    var gidQty = $("#gidQty" + rowIdx).val();
+    var giduPrice = $("#giduPrice" + rowIdx).val();
+    if (Number(gidQty) == '' || Number(gidQty) == undefined) {
+        alertify.error('Quantity is Required!');
+        response = false;
+    }
+    else if (Number(giduPrice) == '' && Number(giduPrice) == undefined) {
+        alertify.error('Unit Price is Requied!');
+        response = false;
+    }
+    else {
+        rowIdx += 1;
+        $('#tGLPostingListbody').append(`
         <tr id="R${rowIdx}">
             <td hidden>
-                <input type="text" class="form-control" id="gitId${rowIdx}" />
+                <input type="text" class="form-control" id="gidId${rowIdx}" />
             </td>
             <td>
                 <input type="text" class="form-control codeChangesFromRow" id="itemCode${rowIdx}" />
@@ -542,21 +574,22 @@ $('#tGLPostingListbody').on('click', '.add', function () {
                 </div>
             </td>
         </tr>`);
-    getAllIssueFromDB(rowIdx);
-    // $('.autoSuggestionSelect').css('width', '100%');
-    // $(".autoSuggestionSelect").select2({});
-    $("#updateItem" + rowIdx).hide();
-    $("#saveAsUpdatedItem" + rowIdx).hide();
-    var prevRowIdx = rowIdx - 1;
-    $("#addItem" + prevRowIdx).hide();
-    $("#itemCode" + prevRowIdx).prop('disabled', true);
-    $("#ddlitemName" + prevRowIdx).prop('disabled', true);
-    $("#unit" + prevRowIdx).prop('disabled', true);
-    $("#gidQty" + prevRowIdx).prop('disabled', true);
-    $("#giduPrice" + prevRowIdx).prop('disabled', true);
-    $("#gidtPrice" + prevRowIdx).prop('disabled', true);
-    $("#updateItem" + prevRowIdx).show();
-    $("#saveAsUpdatedItem" + prevRowIdx).hide();
+        getAllIssueFromDB(rowIdx);
+        // $('.autoSuggestionSelect').css('width', '100%');
+        // $(".autoSuggestionSelect").select2({});
+        $("#updateItem" + rowIdx).hide();
+        $("#saveAsUpdatedItem" + rowIdx).hide();
+        var prevRowIdx = rowIdx - 1;
+        $("#addItem" + prevRowIdx).hide();
+        $("#itemCode" + prevRowIdx).prop('disabled', true);
+        $("#ddlitemName" + prevRowIdx).prop('disabled', true);
+        $("#unit" + prevRowIdx).prop('disabled', true);
+        $("#gidQty" + prevRowIdx).prop('disabled', true);
+        $("#giduPrice" + prevRowIdx).prop('disabled', true);
+        $("#gidtPrice" + prevRowIdx).prop('disabled', true);
+        $("#updateItem" + prevRowIdx).show();
+        $("#saveAsUpdatedItem" + prevRowIdx).hide();
+    }
 });
 $('#tGLPostingListbody').on('click', '.edit', function () {
     let getDomId = $(this).closest('tr').attr('id');
@@ -565,7 +598,7 @@ $('#tGLPostingListbody').on('click', '.edit', function () {
     itemCode = $("#itemCode" + rowIdx).val();
     ddlitemName = $("#ddlitemName" + rowIdx).val();
     unit = $("#unit" + rowIdx).val();
-    gidQty = $("#gitQty" + rowIdx).val();
+    gidQty = $("#gidQty" + rowIdx).val();
     giduPrice = $("#giduPrice" + rowIdx).val();
     gidtPrice = $("#gidtPrice" + rowIdx).val();
 
@@ -614,8 +647,7 @@ $('#tGLPostingListbody').on('click', '.can', function () {
     $("#updateItem" + rowIdx).show();
     $("#saveAsUpdatedItem" + rowIdx).hide();
 });
-function addFirstRow(id) {
-    debugger    
+function addFirstRow(id) {    
     rowIdx = Number(id);
     $('#tGLPostingListbody').append(`
     <tr id="R${rowIdx}">
@@ -626,19 +658,19 @@ function addFirstRow(id) {
             <input type="text" class="form-control codeChangesFromRow" id="itemCode${rowIdx}" />
         </td>
         <td>
-            <select class="form-control-sm accountChangesFromRow autoSuggestionSelect" id="ddlitemName${rowIdx}"></select>
+            <select class="form-control accountChangesFromRow autoSuggestionSelect" id="ddlitemName${rowIdx}"></select>
         </td>
         <td>
             <input type="text" class="form-control numbersOnly" placeholder="0.00" id="unit${rowIdx}" />
         </td>
         <td>
-            <input type="text" class="form-control numbersOnly" placeholder="0.00" id="gidQty{rowIdx}" />
+            <input type="text" class="form-control numbersOnly" placeholder="0.00" id="gidQty${rowIdx}" />
         </td>
         <td>
-            <input type="text" class="form-control numbersOnly" placeholder="0.00" id="giduPrice{rowIdx}" />
+            <input type="text" class="form-control numbersOnly" placeholder="0.00" id="giduPrice${rowIdx}" />
         </td>
         <td>
-            <input type="text" class="form-control numbersOnly" placeholder="0.00" id="gidTPrice{rowIdx}" />
+            <input type="text" class="form-control numbersOnly" placeholder="0.00" id="gidtPrice${rowIdx}" />
         </td>
         <td class="text-center">
             <div id="addItem${rowIdx}" class="row">
@@ -663,12 +695,12 @@ function addFirstRow(id) {
 
 
 /*Runtime Calculate Total Price */
-$("#giduPrice, #gidQty").keyup(function () {
+$('#tGLPostingListbody').keyup(function () {
     var total = 0;
-    var x = $("#giduPrice").val();
-    var y = $("#gidQty").val();
+    var x = $("#giduPrice" + rowIdx).val();
+    var y = $("#gidQty" + rowIdx).val();
 
     var total = x * y;
 
-    $("#gidtPrice").val(total.toFixed(2));
+    $("#gidtPrice" + rowIdx).val(total.toFixed(2));
 });

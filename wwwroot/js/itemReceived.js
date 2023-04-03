@@ -204,13 +204,13 @@ $("#ddlitemName").change(function () {
 function SaveRequest() {
     var result = validationCheck();
     if (result == false) { return; }
-    var data = new FormData(); debugger
+    var data = new FormData(); 
 
     data.append('GRMId', 0);
     data.append('GRMDate', $('#grmDate').val());
     data.append('SSId', $('#ddlsupplierName').val());
     data.append('GRMRemarks', $('#grmRemarks').val());
-    debugger
+    
     var tablelength = $('#tGLPostingListbody tr').length;
     for (var i = 0; i < tablelength - 1; i++) {
         itemList.push({
@@ -546,7 +546,7 @@ function getAllItemFromDB(parameter) {
 $('#tGLPostingListbody').on('change',
     '.accountChangesFromRow',
     function () {
-        let getDomId = $(this).attr('id'); debugger
+        let getDomId = $(this).attr('id'); 
         var rowTrackId = getDomId.slice(11);
         var value = $("#ddlitemName" + rowTrackId).val();
         if (value != null) {
@@ -582,16 +582,14 @@ $('#tGLPostingListbody').on('change',
     });
 
 
-/*Runtime Calculate Total Price */
-//$("#grduPrice, #grdQty").keyup(function () {
-//    var total = 0;
-//    var x = $("#grduPrice").val();
-//    var y = $("#grdQty").val();
+$('#tGLPostingListbody').keyup(function () {
+     var total = 0;
+    var x = $("#grduPrice" + rowIdx).val();
+    var y = $("#grdQty" + rowIdx ).val();
 
-//    var total = x * y;
-
-//    $("#grdtPrice").val(total);
-//});
+    var total = x * y;
+    $("#grdtPrice" + rowIdx).val(total);
+})
 
 
 
