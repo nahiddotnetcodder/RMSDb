@@ -1,0 +1,101 @@
+﻿@{
+    
+}
+<div class="container p-3">
+    <div class="row">
+        <div class="col-4">
+            <div class="form-group">
+                <div class="row mb-2">
+                    <div class="col-5"><label>Journal Date:</label></div>
+                    <div class="col-7">
+                        <input id="ajTrDate" type="date" class="form-control" required />
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-4">
+            <div class="form-group">
+                <div class="row mb-2">
+                    <div class="col-5"><label>Document Date:</label></div>
+                    <div class="col-7">
+                        <input id="ajDDate" type="date" class="form-control" required />
+                    </div>
+                </div>
+                <div class="row mb-2">
+                    <div class="col-5"><label>Event Date:</label></div>
+                    <div class="col-7">
+                        <input id="ajEDate" type="date" class="form-control" required />
+                    </div>
+                </div>
+                <div class="row mb-1">
+                    <div class="col-5"><label>Source Ref:</label></div>
+                    <div class="col-7">
+                        <input id="ajSoRef" type="text" class="form-control" required />
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-4">
+            <div class="form-group">
+                <div class="row mb-2">
+                    <div class="col-5"><label>Reference:</label></div>
+                    <div class="col-7">
+                        <input hidden id="ajRefPrefix" type="text" class="form-control" disabled/>
+                        <input id="ajRef" type="text" class="form-control" disabled/>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div style="margin-top:10px" class="card">
+        <div class="card-header"><b>GL Postings </b></div>
+        <div class="card-body table-responsive">
+            <span id="app_err-container"></span>
+            <table class="table table-sm table-hover table-bordered">
+                <thead class="dark-mode">
+                    <tr>
+                        <th class="text-center" scope="col">Account Code</th>
+                        <th class="text-center" scope="col">Account Description</th>
+                        <th class="text-center" scope="col">Debit</th>
+                        <th class="text-center" scope="col">Credit</th>
+                        <th class="text-center" scope="col">Memo</th>
+                        <th class="text-center" scope="col">Action</th>
+                    </tr>
+                </thead>
+                <tbody id="tGLPostingListbody" class="txt-align-left">
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-3">
+        </div>
+        <div class="col-6">
+            <div class="form-group">
+                <div class="row mb-2">
+                    <div class="col-2"><label>Memo</label></div>
+                    <div class="col-9">
+                        <textarea id="ajMemo" type="text" class="form-control" rows="2" cols=""></textarea>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-3">
+        </div>
+        <div class="col-6 text-center">
+            <a id="addNewButton" class="btn btn-primary"><i class="bi bi-plus-circle"></i>Process Journal Entry</a>
+        </div>
+    </div>
+</div>
+@section Scripts{
+    <script src="~/js/accJournalEntry.js"></script>
+    <script>
+        $(document).ready(function () {
+            getInitData();
+            setCurrentDate();
+            addFirstRow(0);
+        });
+    </script>
+}
