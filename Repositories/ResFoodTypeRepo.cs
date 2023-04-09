@@ -49,11 +49,10 @@ namespace RMS.Repositories
         {
             var status = new ResponseStatus();
 
-            var allData = await _context.ResFoodType.Where(x => x.RFTName == model.RFTName ).ToListAsync();
-            if (allData.Count > 0)
+            if (IsItemExists(model.RFTName, model.RFTId) == true)
             {
                 status.StatusCode = 0;
-                status.Message = "Record already exists";
+                status.Message = "Table Name already Exit";
                 return status;
             }
             var data = await _context.ResFoodType.Where(x => x.RFTId == model.RFTId).FirstOrDefaultAsync();

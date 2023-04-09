@@ -61,9 +61,9 @@ builder.Services.AddScoped<IHRWStatus, HRWStatusRepo>();
 
 builder.Services.AddScoped<IStoreCategory, StoreCategoryRepo>();
 builder.Services.AddScoped<IStoreDClose, StoreDCloseRepo>();
-builder.Services.AddScoped<IStoreGIssueMaster, StoreGIssueMasterRepo>();
+builder.Services.AddScoped<IStoreGIssue, StoreGIssueRepo>();
 builder.Services.AddScoped<IStoreGoodsStock, StoreGoodsStockRepo>();
-builder.Services.AddScoped<IStoreGReceiveMaster, StoreGReceiveMasterRepo>();
+builder.Services.AddScoped<IStoreGReceive, StoreGReceiveRepo>();
 builder.Services.AddScoped<IStoreIGen, StoreIGenRepo>();
 builder.Services.AddScoped<IStoreSCategory, StoreSCategoryRepo>();
 builder.Services.AddScoped<IStoreSuppliers, StoreSuppliersRepo>();
@@ -73,8 +73,10 @@ builder.Services.AddScoped<IResFoodType, ResFoodTypeRepo>();
 builder.Services.AddScoped<IResKitchenInfo, ResKitchenInfoRepo>();
 builder.Services.AddScoped<IResTable, ResTableRepo>();
 builder.Services.AddScoped<IResMenu, ResMenuRepo>();
-builder.Services.AddScoped<IRecManagerMaster, RecManagerMasterRepo>();
+builder.Services.AddScoped<IRecManager, RecManagerRepo>();
 builder.Services.AddScoped<IResInfo, ResInfoRepo>();
+builder.Services.AddScoped<IResDClose, ResDCloseRepo>();
+builder.Services.AddScoped<IResSales, ResSalesRepo>();
 
 
 

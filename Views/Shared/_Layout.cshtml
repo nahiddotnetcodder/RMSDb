@@ -176,7 +176,7 @@
             </a>           
           </li>
 
-                        @*point of sales*@
+             @*point of sales*@
         <li class="nav-item">
             <a href="#" class="nav-link">
                 <i class="nav-icon fa-solid fa-utensils"></i>
@@ -187,16 +187,16 @@
             </a>
             <ul class="nav nav-treeview">
                 <li class="nav-item">
-                    <a href=#" class="nav-link">
+                    <a href="pages/mailbox/read-mail.html" class="nav-link">
                         <i class="far fa-circle nav-icon"></i>
                         <p>Operations</p>
                         <i class="fas fa-angle-left right"></i>
                     </a>
                     <ul class="nav nav-treeview ml-2">
 
-                                        @*operations dropdown start*@
+                        @*Operation start*@
                         <li class="nav-item">
-                            <a asp-action="Index" asp-controller="RDClose" asp-area="Admin" class="nav-link">
+                            <a asp-action="Index" asp-controller="ResSales" class="nav-link">
                                 <i class="nav-icon fas fa-sign-out-alt"></i>
                                 <p>
                                     Sales
@@ -204,7 +204,7 @@
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a asp-action="Index" asp-controller="RDClose" asp-area="Admin" class="nav-link">
+                            <a asp-action="Index" asp-controller="#" class="nav-link">
                                 <i class="nav-icon fas fa-sign-out-alt"></i>
                                 <p>
                                     Bill Print
@@ -212,16 +212,14 @@
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a asp-action="Index" asp-controller="RDClose" asp-area="Admin" class="nav-link">
+                            <a asp-action="Index" asp-controller="#" class="nav-link">
                                 <i class="nav-icon fas fa-sign-out-alt"></i>
                                 <p>
                                     Bill Receive
                                 </p>
                             </a>
                         </li>
-                                        @*operations dropdown end*@
-
-
+                        @*OPerations end*@
                     </ul>
                 </li>
                 <li class="nav-item">
@@ -232,17 +230,48 @@
                     </a>
                     <ul class="nav nav-treeview ml-2">
 
-                                        @*inquires start*@
+                        @*inquires start*@
                         <li class="nav-item">
-                            <a asp-action="Index" asp-controller="ResTable"  class="nav-link">
+                            <a asp-action="Index" asp-controller="#"  class="nav-link">
                                 <i class="nav-icon fas fa-sign-out-alt"></i>
                                 <p>
-                                    a
+                                    Daily Sales Report
                                 </p>
                             </a>
                         </li>
-
-                                        @*inquires end*@
+                        <li class="nav-item">
+                            <a asp-action="Index" asp-controller="#" class="nav-link">
+                                <i class="nav-icon fas fa-sign-out-alt"></i>
+                                <p>
+                                    Date to Date Sales Report
+                                </p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a asp-action="Index" asp-controller="#" class="nav-link">
+                                <i class="nav-icon fas fa-sign-out-alt"></i>
+                                <p>
+                                    Waiter wise Sales Report
+                                </p>
+                            </a>
+                        </li>
+                         <li class="nav-item">
+                            <a asp-action="Index" asp-controller="#" class="nav-link">
+                                <i class="nav-icon fas fa-sign-out-alt"></i>
+                                <p>
+                                    Table wise Sales Report
+                                </p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a asp-action="Index" asp-controller="#" class="nav-link">
+                                <i class="nav-icon fas fa-sign-out-alt"></i>
+                                <p>
+                                    Item wise Sales Report
+                                </p>
+                            </a>
+                        </li>
+                         @*inquires end*@
                     </ul>
                 </li>
                 <li class="nav-item">
@@ -253,15 +282,16 @@
                     </a>
                     <ul class="nav nav-treeview ml-2">
 
-                                        @*Maintenance start*@
+                        @*Maintenance start*@
                         <li class="nav-item">
-                            <a asp-action="Index" asp-controller="HRDepartment" class="nav-link">
+                            <a asp-action="Index" asp-controller="ResMenu" class="nav-link">
                                 <i class="nav-icon fas fa-sign-out-alt"></i>
                                 <p>
                                     Menu Entry
                                 </p>
                             </a>
                         </li>
+                        
                         <li class="nav-item">
                             <a asp-action="Index" asp-controller="ResFoodType"  class="nav-link">
                                 <i class="nav-icon fas fa-sign-out-alt"></i>
@@ -282,19 +312,18 @@
                             <a asp-action="Index" asp-controller="ResTable" class="nav-link">
                                 <i class="nav-icon fas fa-sign-out-alt"></i>
                                 <p>
-                                    Table Setup
+                                    Table Entry
                                 </p>
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a asp-action="Index" asp-controller="ResMenu" class="nav-link">
+                             <a asp-action="Index" asp-controller="ResDClose" class="nav-link">
                                 <i class="nav-icon fas fa-sign-out-alt"></i>
                                 <p>
-                                    Menu 
+                                    Day Close
                                 </p>
                             </a>
                         </li>
-                        
                        @*Maintenance end*@
                     </ul>
                 </li>
@@ -348,6 +377,22 @@
                     </a>
                     <ul class="nav nav-treeview ml-2">
                         <li class="nav-item">
+                            <a asp-action="Index" asp-controller="#" class="nav-link">
+                                <i class="nav-icon fas fa-sign-out-alt"></i>
+                                <p>
+                                    Item Receive Report (D.T.D)
+                                </p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a asp-action="Index" asp-controller="#" class="nav-link">
+                                <i class="nav-icon fas fa-sign-out-alt"></i>
+                                <p>
+                                    Item Issue Report (D.T.D)
+                                </p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
                             <a asp-action="Index" asp-controller="StoreGoodsStock" class="nav-link">
                                 <i class="nav-icon fas fa-sign-out-alt"></i>
                                 <p>
@@ -355,13 +400,38 @@
                                 </p>
                             </a>
                         </li>
-                                        @*Inquiries & Reports end*@
+                        <li class="nav-item">
+                            <a asp-action="Index" asp-controller="#" class="nav-link">
+                                <i class="nav-icon fas fa-sign-out-alt"></i>
+                                <p>
+                                    Item Receive Report (S.W)
+                                </p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a asp-action="Index" asp-controller="#" class="nav-link">
+                                <i class="nav-icon fas fa-sign-out-alt"></i>
+                                <p>
+                                    Item Issue Report (D.W)
+                                </p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a asp-action="Index" asp-controller="#" class="nav-link">
+                                <i class="nav-icon fas fa-sign-out-alt"></i>
+                                <p>
+                                    Item Bin Card
+                                </p>
+                            </a>
+                        </li>
+
+                         @*Inquiries & Reports end*@
                     </ul>
                 </li>
               <li class="nav-item">
                 <a href="pages/mailbox/compose.html" class="nav-link">
                   <i class="far fa-circle nav-icon"></i>
-                  <p>Maintenance</p> @* solve name*@
+                  <p>Maintenance</p>
                   <i class="fas fa-angle-left right"></i>
                 </a>
                 <ul class="nav nav-treeview ml-2">
@@ -442,7 +512,7 @@
                     </a>
                     <ul class="nav nav-treeview ml-2">
 
-                                        @*Oparations start*@
+                          @*Oparations start*@
                         <li class="nav-item">
                             <a asp-action="Index" asp-controller="HREmpSalary" class="nav-link">
                                 <i class="nav-icon fas fa-sign-out-alt"></i>
@@ -486,19 +556,46 @@
                         <i class="fas fa-angle-left right"></i>
                     </a>
                     <ul class="nav nav-treeview ml-2">
-
-                                        @*Restaurant setup*@
                         <li class="nav-item">
-                            <a asp-action="Index" asp-controller="RDClose"  class="nav-link">
+                            <a asp-action="Index" asp-controller="#"  class="nav-link">
                                 <i class="nav-icon fas fa-sign-out-alt"></i>
                                 <p>
-                                    Restaurant Setup
+                                    Daily Attendance Report
                                 </p>
                             </a>
                         </li>
-
-
-
+                        <li class="nav-item">
+                            <a asp-action="Index" asp-controller="#"  class="nav-link">
+                                <i class="nav-icon fas fa-sign-out-alt"></i>
+                                <p>
+                                    Emp. wise Leave Report
+                                </p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a asp-action="Index" asp-controller="#"  class="nav-link">
+                                <i class="nav-icon fas fa-sign-out-alt"></i>
+                                <p>
+                                    Salary Statement
+                                </p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a asp-action="Index" asp-controller="#" class="nav-link">
+                                <i class="nav-icon fas fa-sign-out-alt"></i>
+                                <p>
+                                    Pay Slip
+                                </p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a asp-action="Index" asp-controller="#" class="nav-link">
+                                <i class="nav-icon fas fa-sign-out-alt"></i>
+                                <p>
+                                    Roaster Report
+                                </p>
+                            </a>
+                        </li>
 
                     </ul>
                 </li>
@@ -845,26 +942,8 @@
                                 </p>
                             </a>
                         </li>
-
-                        <li class="nav-item">
-                            <a asp-action="Index" asp-controller=""  class="nav-link">
-                                <i class="nav-icon fas fa-sign-out-alt"></i>
-                                <p>
-                                    Fiscal Years
-                                </p>
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a asp-action="Index" asp-controller=""  class="nav-link">
-                                <i class="nav-icon fas fa-sign-out-alt"></i>
-                                <p>
-                                    Operational Date Setup
-                                </p>
-                            </a>
-                        </li>
-
-                                        @*setup dropdown end*@
-
+             
+                        @*setup dropdown end*@
 
                     </ul>
                 </li>
@@ -885,12 +964,12 @@
                     </a>
                     <ul class="nav nav-treeview ml-2">
 
-                                        @*setup dropdown start*@
+                        @*setup dropdown start*@
                         <li class="nav-item">
                             <a asp-action="Index" asp-controller="#"  class="nav-link">
                                 <i class="nav-icon fas fa-sign-out-alt"></i>
                                 <p>
-                                     DB Backup & Restore
+                                     DB Backup & Download
                                 </p>
                             </a>
                         </li>
@@ -936,7 +1015,7 @@
   </div>
   <!-- /.content-wrapper -->
   <footer class="main-footer text-center">
-    <strong>Copyright &copy; 2023 <a href="https://raj-int.com/">Raj International</a></strong>
+    <strong>Copyright &copy; 2023 <a href="https://raj-int.com/">CODE Technologies</a></strong>
 
 
   </footer>
@@ -950,7 +1029,7 @@
 
 
     <!-- jQuery -->
-    <script src="~/plugins/jquery/jquery.min.js"></script>
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <!-- jQuery UI 1.11.4 -->
 
 
@@ -983,7 +1062,7 @@
     <!-- AdminLTE dashboard demo (This is only for demo purposes) -->
     <script src="~/dist/js/demo.js"></script>
     <script src="~/dist/js/pages/dashboard.js"></script>
-    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    @*<script src="~/lib/jquery/dist/jquery.min.js"></script>*@
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
     @*<script src="~/lib/select2/js/select2.js"></script>*@

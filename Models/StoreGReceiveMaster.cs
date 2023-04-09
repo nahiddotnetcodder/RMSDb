@@ -39,7 +39,7 @@ namespace RMS.Models
 
         public DateTime CreateDate { get; set; } = DateTime.Now;
         [NotMapped]
-        public string Items { get; set; }
+        public string SGRItems { get; set; }
         public virtual List<StoreGReceiveDetails> StoreGReceiveDetails { get; set; } 
 
     }

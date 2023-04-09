@@ -48,11 +48,10 @@ namespace RMS.Repositories
         public async Task<ResponseStatus> Update(ResKitchenInfo model)
         {
             var status = new ResponseStatus();
-            var allData = await _context.ResKitchenInfo.Where(x => x.RKitchenName == model.RKitchenName ).ToListAsync();
-            if (allData.Count > 0)
+            if (IsItemExists(model.RKitchenName, model.RKId) == true)
             {
                 status.StatusCode = 0;
-                status.Message = "Record already exists";
+                status.Message = "Table Name already Exit";
                 return status;
             }
 
@@ -60,7 +59,7 @@ namespace RMS.Repositories
 
             data.RKId = model.RKId;
             data.RKitchenName  = model.RKitchenName;
-            data.RKDescription = model.RKDescription;
+            data.RKDescription = string.IsNullOrEmpty(model.RKDescription) ? string.Empty : model.RKDescription;
             _context.ResKitchenInfo.Update(data);
 
             var result = await _context.SaveChangesAsync();

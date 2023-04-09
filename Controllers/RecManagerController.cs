@@ -5,13 +5,13 @@ namespace RMS.Controllers
 {
     public class RecManagerController : Controller
     {
-        private readonly IRecManagerMaster _repo;
+        private readonly IRecManager _repo;
         private readonly IStoreIGen _igen;
         private readonly IStoreGoodsStock _stock;
         private readonly IResMenu _menu;
         private readonly IStoreUnit _unit;
 
-        public RecManagerController(IRecManagerMaster repo,IStoreIGen igen, IStoreGoodsStock stock, IResMenu menu, IStoreUnit unit)
+        public RecManagerController(IRecManager repo,IStoreIGen igen, IStoreGoodsStock stock, IResMenu menu, IStoreUnit unit)
         {
             _repo = repo;
             _igen = igen;
@@ -78,12 +78,12 @@ namespace RMS.Controllers
             return new JsonResult(new { chartMasterDD, chartTypeDD, recMasterDD, recTypeDD });
         }
         [HttpPost]
-        public async Task<ActionResult> Save(RMMaster model)
+        public async Task<ActionResult> Save(RecMMaster model)
         {
             if (model.Items != null)
             {
-                var jsonItems = JsonConvert.DeserializeObject<List<RMDetails>>(model.Items);
-                model.RMDetails = jsonItems;
+                var jsonItems = JsonConvert.DeserializeObject<List<RecMDetails>>(model.Items);
+                model.RecMDetails = jsonItems;
             }
             var result = await _repo.Create(model);
             return Json(result);
@@ -114,12 +114,12 @@ namespace RMS.Controllers
             return Json(data);
         }
         [HttpPost]
-        public async Task<ActionResult> Update(RMMaster model)
+        public async Task<ActionResult> Update(RecMMaster model)
         {
             if (model.Items != null)
             {
-                var jsonItems = JsonConvert.DeserializeObject<List<RMDetails>>(model.Items);
-                model.RMDetails = jsonItems;
+                var jsonItems = JsonConvert.DeserializeObject<List<RecMDetails>>(model.Items);
+                model.RecMDetails = jsonItems;
             }
             var result = await _repo.Update(model);
             return Json(result);

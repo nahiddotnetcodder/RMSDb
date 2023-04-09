@@ -10,8 +10,6 @@
 
   <ItemGroup>
     <Content Remove="Views\Role\.cshtml" />
-    <Content Remove="Views\StoreGIssue\Edit.cshtml" />
-    <Content Remove="Views\StoreGReceive\Edit.cshtml" />
     <Content Remove="wwwroot\css\site.css~RF8f390a.TMP" />
   </ItemGroup>
 
@@ -28,7 +26,6 @@
     <None Include="Views\AccChartType\Index.cshtml" />
     <None Include="Views\AccChart\Index.cshtml" />
     <None Include="Views\AccFiscalYear\Index.cshtml" />
-    <None Include="Views\AccJournalEntry\Edit.cshtml" />
     <None Include="Views\AccJournalEntry\JournalDetails.cshtml" />
     <None Include="Views\AccJournalEntry\Journals.cshtml" />
     <None Include="Views\Home\Index.cshtml" />
@@ -68,9 +65,7 @@
     <None Include="Views\Shared\_ValidationScriptsPartial.cshtml" />
     <None Include="Views\StoreCategory\Index.cshtml" />
     <None Include="Views\StoreDClose\Index.cshtml" />
-    <None Include="Views\StoreGIssue\Edit.cshtml" />
     <None Include="Views\StoreGoodsStock\Index.cshtml" />
-    <None Include="Views\StoreGReceive\Edit.cshtml" />
     <None Include="Views\StoreIGen\Create.cshtml" />
     <None Include="Views\StoreIGen\Details.cshtml" />
     <None Include="Views\StoreIGen\Edit.cshtml" />

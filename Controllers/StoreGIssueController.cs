@@ -6,13 +6,13 @@ namespace RMS.Controllers
 {
     public class StoreGIssueController : Controller
     {
-        private readonly IStoreGIssueMaster _repo;
+        private readonly IStoreGIssue _repo;
         private readonly IStoreIGen _igen;
         private readonly IHRDepartment _dept;
         private readonly IStoreGoodsStock _stock;
         private readonly IStoreCategory _cat;
 
-        public StoreGIssueController(IStoreGIssueMaster repo, IStoreIGen igen, IHRDepartment dept, IStoreGoodsStock stock, IStoreCategory cat)
+        public StoreGIssueController(IStoreGIssue repo, IStoreIGen igen, IHRDepartment dept, IStoreGoodsStock stock, IStoreCategory cat)
         {
             _repo = repo;
             _igen = igen;
@@ -73,14 +73,14 @@ namespace RMS.Controllers
         [HttpPost]
         public async Task<ActionResult> Save(StoreGIssueMaster model)
         {
-            if (model.Items == "[]")
+            if (model.SGIItems == "[]")
             {
                 TempData["ErrorMessage"] = "Item code was null!";
                 return View();
             }
-            if (model.Items != null)
+            if (model.SGIItems != null)
             {
-                var jsonItems = JsonConvert.DeserializeObject<List<StoreGIssueDetails>>(model.Items);
+                var jsonItems = JsonConvert.DeserializeObject<List<StoreGIssueDetails>>(model.SGIItems);
                 model.StoreGIssueDetails = jsonItems;
             }
             var result = await _repo.Create(model);
@@ -107,9 +107,9 @@ namespace RMS.Controllers
         [HttpPost]
         public async Task<ActionResult> Update(StoreGIssueMaster model)
         {
-            if (model.Items != null)
+            if (model.SGIItems != null)
             {
-                var jsonItems = JsonConvert.DeserializeObject<List<StoreGIssueDetails>>(model.Items);
+                var jsonItems = JsonConvert.DeserializeObject<List<StoreGIssueDetails>>(model.SGIItems);
                 model.StoreGIssueDetails = jsonItems;
             }
             var result = await _repo.Update(model);
@@ -144,7 +144,7 @@ namespace RMS.Controllers
             {
                 Id = x.SGSId,
                 AccountGroupId = x.SGSId,
-                Name = x.ItemName,
+                Name = x.ItemCode + " " + x.ItemName,
                 Code = x.ItemCode,
                 Description = x.ItemName,
                 Unit = x.Unit,

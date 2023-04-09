@@ -68,7 +68,7 @@ function getInitData() {
     });
 }
 
-function addItem() { 
+function addItem() {
     var result = validationCheckForItem();
     if (result == false) { return; }
     var descriptionId = $("#ddlitemName option:selected").val();
@@ -225,7 +225,7 @@ function SaveRequest() {
             
         });
     }
-    data.append('Items', JSON.stringify(itemList));
+    data.append('SGRItems', JSON.stringify(itemList));
 
     $.ajax({
         processData: false,
@@ -286,7 +286,6 @@ function getAllReceive() {
         success: function (data) {
             let items = data;
             $('#tJournalListbody').empty();
-            
             for (var i = 0; i < items.length; i++) {
 
                 $('#tJournalListbody').append(
@@ -297,11 +296,10 @@ function getAllReceive() {
                         <td id="grmRemarks${rowJournalTableIdx}">` + items[i].grmRemarks + `</td>
                         <td class="text-center">
                             <button id="` + items[i].grmId + `" class="btn btn-sm btn-primary view" type="button">Details</button>
-                            
+                            <a class= "btn btn-sm btn-secondary" href='/StoreGReceive/Edit?id=` + items[i].grmId + `'>Edit</a>
+                            <button id="` + items[i].grmId + `" class="btn btn-sm btn-danger delete" type="button">Delete</button>
                         </td>
                     </tr>`
-                    //< a class= "btn btn-sm btn-secondary" href = '/StoreGReceive/Edit?id=` + items[i].grmId + `' > Edit</a >
-                    //<button id="` + items[i].grmId + `" class="btn btn-sm btn-danger delete" type="button">Delete</button>
                 );
             }
         }
@@ -320,6 +318,7 @@ $('.print').click(function () {
     window.print();
 });
 function getForEdit() {
+    debugger
     var url = window.location.href;
     var id = url.substring(url.lastIndexOf('=') + 1);
 
@@ -329,20 +328,20 @@ function getForEdit() {
         data: "{}",
         success: function (data) {
             allAccounts = data.allAccounts;
-            let items = data.items;
+            let items = data.storeGReceiveDetails;
             rowIdx = 0;
             $('#tGLPostingListbody').empty();
             for (var i = 0; i < items.length; i++) {
-                $('#tGLPostingListbody').append(
-                    `<tr id="R${rowIdx}">
+                $('#tGLPostingListbody').append(`
+                    <tr id="R${rowIdx}">
                         <td hidden>
                             <input type="text" class="form-control" id="grdId${rowIdx}" />
                         </td>
                         <td>
-                            <input type="text" class="form-control codeChangesFromRow" id="itemAccCode${rowIdx}" />
+                            <input type="text" class="form-control codeChangesFromRow" id="itemCode${rowIdx}" />
                         </td>
                         <td>
-                            <select class="form-control accountChangesFromRow autoSuggestionSelect" id="ddlitemName${rowIdx}"><option selected>` + items[i].itemDescriptionId + `</option></select>
+                            <select class="form-control accountChangesFromRow autoSuggestionSelect" id="ddlitemName${rowIdx}"><option selected>` + items[i].itemName + `</option></select>
                         </td>
                         <td>
                             <input type="text" class="form-control codeChangesFromRow" id="grdUnit${rowIdx}" />
@@ -360,23 +359,22 @@ function getForEdit() {
                             <div id="addItem${rowIdx}" class="row">
                                 <a style="cursor:pointer" class="btn btn-primary add"><i class="bi bi-plus-circle"></i>add</a>
                             </div>
-                            <div id="updateItem${rowIdx}" class="row">
+                            <div id="updateItem${rowIdx}" class="row" style="flex-wrap:nowrap">
                                 <button style='margin-left:2px' class="btn btn-sm  edit" type="button"><i class="fa-solid fa-pencil text-success" aria-hidden="true" title="Edit"></i></button>
                                 <button style='margin-left:2px' class="btn btn-sm  remove" type="button"><i class="fa-solid fa-xmark text-danger" aria-hidden="true" title="Delete"></i></button>
                             </div>
-                            <div id="saveAsUpdatedItem${rowIdx}" class="row">
+                            <div id="saveAsUpdatedItem${rowIdx}" class="row"  style="flex-wrap:nowrap">
                                 <button style='margin-left:2px' class="btn btn-sm  sav" type="button"><i class="fa-solid fa-check text-success" aria-hidden="true" title="save"></i></button>
                                 <button style='margin-left:2px' class="btn btn-sm  can" type="button"><i class="fa-solid fa-xmark text-success" aria-hidden="true" title="cancel"></i></button>
                             </div>
                         </td>
-                    </tr>`
-                );
+                    </tr>`); 
                 getAllItemFromDB(rowIdx);
-                $("#grdId$" + rowIdx).val(items[i].grdId$);
+                $("#grdId" + rowIdx).val(items[i].grdId);
                 $("#itemCode" + rowIdx).val(items[i].itemCode);
                 $("#ddlitemName" + rowIdx).val(items[i].itemDescriptionId);
                 $("#ddlitemName" + rowIdx).change();
-                $("#grdUnit" + rowIdx).val(items[i].grdUnit);
+                $("#grdUnit" + rowIdx).val(items[i].unit);
                 $("#grdQty" + rowIdx).val(items[i].grdQty);
                 $("#grduPrice" + rowIdx).val(items[i].grduPrice);
                 $("#grdtPrice" + rowIdx).val(items[i].grdtPrice);
@@ -398,7 +396,6 @@ function getForEdit() {
         }
     });
 }
-
 function getDescriptionDD() {
     $.ajax({
         type: "GET",
@@ -434,25 +431,34 @@ function getDescriptionDD() {
 }
 
 $('#updateButton').click(function () {
-
-    data.append('GRMId', 0);
+    var result = validationCheck();
+    if (result == false) { return; }
+    var data = new FormData();
+    debugger
+    data.append('GRMId', $('#grmId').val());
     data.append('GRMDate', $('#grmDate').val());
     data.append('SSId', $('#ddlsupplierName').val());
     data.append('GRMRemarks', $('#grmRemarks').val());
 
     var tablelength = $('#tGLPostingListbody tr').length;
-    for (var i = 1; i <= tablelength; i++) {
+    for (var i = 0; i < tablelength - 1; i++) {
+        var descId = $('#ddlitemName' + i).find(":selected").val();
+        var desc = $('#ddlitemName' + i).find(":selected").text();
+        if (descId == desc) {
+            descId = allAccounts.filter(x => x.name == desc)[0].id;
+        }
         itemList.push({
-            grdId: $('#grdId' + i).text(),
-            itemCode: $('#itemCode' + i).text(),
-            ddlitemName: $('#itemName' + i).text(),
-            grdUnit: $('#grdUnit' + i).text(),
-            grdQty: $('#grdQty' + i).text(),
-            grduPrice: $('#grduPrice' + i).text(),
-            grdtPrice: $('#grdtPrice' + i).text()
+            grdId: $('#grdId' + i).val() ?? 0,
+            itemCode: $('#itemCode' + i).val(),
+            itemDescriptionId: descId,
+            itemName: $('#ddlitemName' + i).find(":selected").text(),
+            uni: $('#unit' + i).val(),
+            grdQty: $('#grdQty' + i).val(),
+            grduPrice: $('#grduPrice' + i).val(),
+            grdtPrice: $('#grdtPrice' + i).val()
         });
     }
-    data.append('Items', JSON.stringify(itemList));
+    data.append('SGRItems', JSON.stringify(itemList)); 
 
     $.ajax({
         processData: false,
@@ -565,6 +571,7 @@ $('#tGLPostingListbody').on('change',
 $('#tGLPostingListbody').on('change',
     '.codeChangesFromRow',
     function () {
+        debugger
         let getDomId = $(this).attr('id');
         var rowTrackId = getDomId.slice(8);
         var value = $("#itemCode" + rowTrackId).val();
@@ -637,11 +644,11 @@ $('#tGLPostingListbody').on('click', '.add', function () {
                     <div id="addItem${rowIdx}" class="row">
                         <a style="cursor:pointer" class="btn btn-primary add"><i class="bi bi-plus-circle"></i>add</a>
                     </div>
-                    <div id="updateItem${rowIdx}" class="row">
+                    <div id="updateItem${rowIdx}" class="row" style="flex-wrap:nowrap">
                         <button style='margin-left:2px' class="btn btn-sm  edit" type="button"><i class="fa-solid fa-pencil text-success" aria-hidden="true" title="Edit"></i></button>
                         <button style='margin-left:2px' class="btn btn-sm  remove" type="button"><i class="fa-solid fa-xmark text-danger" aria-hidden="true" title="Delete"></i></button>
                     </div>
-                    <div id="saveAsUpdatedItem${rowIdx}" class="row">
+                    <div id="saveAsUpdatedItem${rowIdx}" class="row" style="flex-wrap:nowrap">
                         <button style='margin-left:2px' class="btn btn-sm  sav" type="button"><i class="fa-solid fa-check text-success" aria-hidden="true" title="save"></i></button>
                         <button style='margin-left:2px' class="btn btn-sm  can" type="button"><i class="fa-solid fa-xmark text-success" aria-hidden="true" title="cancel"></i></button>
                     </div>
@@ -750,11 +757,11 @@ function addFirstRow(id) {
             <div id="addItem${rowIdx}" class="row">
                 <a style="cursor:pointer" class="btn btn-primary add"><i class="bi bi-plus-circle"></i>add</a>
             </div>
-            <div id="updateItem${rowIdx}" class="row">
+            <div id="updateItem${rowIdx}" class="row" style="flex-wrap:nowrap">
                 <button style='margin-left:2px' class="btn btn-sm  edit" type="button"><i class="fa-solid fa-pencil text-success" aria-hidden="true" title="Edit"></i></button>
                 <button style='margin-left:2px' class="btn btn-sm  remove" type="button"><i class="fa-solid fa-xmark text-danger" aria-hidden="true" title="Delete"></i></button>
             </div>
-            <div id="saveAsUpdatedItem${rowIdx}" class="row">
+            <div id="saveAsUpdatedItem${rowIdx}" class="row"  style="flex-wrap:nowrap">
                 <button style='margin-left:2px' class="btn btn-sm  sav" type="button"><i class="fa-solid fa-check text-success" aria-hidden="true" title="save"></i></button>
                 <button style='margin-left:2px' class="btn btn-sm  can" type="button"><i class="fa-solid fa-xmark text-success" aria-hidden="true" title="cancel"></i></button>
             </div>

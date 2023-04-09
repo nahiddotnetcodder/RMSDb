@@ -51,9 +51,12 @@ namespace RMS.Data
         public virtual DbSet<ResKitchenInfo> ResKitchenInfo { get; set; }
         public virtual DbSet<ResTable> ResTable { get; set; }
         public virtual DbSet<ResMenu> ResMenu { get; set; }
-        public virtual DbSet<RMMaster> RMMaster { get; set; }
-        public virtual DbSet<RMDetails> RMDetails { get; set; }
+        public virtual DbSet<RecMMaster> RecMMaster { get; set; }
+        public virtual DbSet<RecMDetails> RecMDetails { get; set; }
         public virtual DbSet<ResInfo> ResInfo { get; set; }
+        public virtual DbSet<ResDClose> ResDClose { get; set; }
+        public virtual DbSet<ResSalesMaster> ResSalesMaster { get; set; }
+        public virtual DbSet<ResSalesDetails> ResSalesDetails { get; set; }
 
     }
 }

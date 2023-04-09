@@ -23,8 +23,10 @@ namespace RMS.Models
         [Display(Name = "Quantity")]
         public float SGSQty { get; set; }
         [Display(Name = "Price")]
+        [DisplayFormat(DataFormatString = "{0:0.00}", ApplyFormatInEditMode = true)]
         public float SGSUPrice { get; set; }
         [Display(Name = "Total Price")]
+        [DisplayFormat(DataFormatString = "{0:0.00}", ApplyFormatInEditMode = true)]
         public int SGSTPrice { get; set; }
     }
 }

@@ -5,12 +5,12 @@ namespace RMS.Controllers
 {
     public class StoreGReceiveController : Controller
     {
-        private readonly IStoreGReceiveMaster _repo;
+        private readonly IStoreGReceive _repo;
         private readonly IStoreIGen _igen;
         private readonly IStoreSuppliers _suppliers;
         private readonly IStoreCategory _cat;
 
-        public StoreGReceiveController(IStoreGReceiveMaster repo,IStoreIGen igen, IStoreSuppliers suppliers, IStoreCategory cat)
+        public StoreGReceiveController(IStoreGReceive repo,IStoreIGen igen, IStoreSuppliers suppliers, IStoreCategory cat)
         {
             _repo = repo;
             _igen = igen;
@@ -68,14 +68,14 @@ namespace RMS.Controllers
         [HttpPost]
         public async Task<ActionResult> Save(StoreGReceiveMaster model)
         {
-            if (model.Items == "[]")
+            if (model.SGRItems == "[]")
             {
                 TempData["ErrorMessage"] = "Item code was null!";
                 return View();
             }
-            if (model.Items != null)
+            if (model.SGRItems != null)
             {
-                var jsonItems = JsonConvert.DeserializeObject<List<StoreGReceiveDetails>>(model.Items);
+                var jsonItems = JsonConvert.DeserializeObject<List<StoreGReceiveDetails>>(model.SGRItems);
                 model.StoreGReceiveDetails = jsonItems;
             }
             var result = await _repo.Create(model);
@@ -102,9 +102,9 @@ namespace RMS.Controllers
         [HttpPost]
         public async Task<ActionResult> Update(StoreGReceiveMaster model)
         {
-            if (model.Items != null)
+            if (model.SGRItems != null)
             {
-                var jsonItems = JsonConvert.DeserializeObject<List<StoreGReceiveDetails>>(model.Items);
+                var jsonItems = JsonConvert.DeserializeObject<List<StoreGReceiveDetails>>(model.SGRItems);
                 model.StoreGReceiveDetails = jsonItems;
             }
             var result = await _repo.Update(model);

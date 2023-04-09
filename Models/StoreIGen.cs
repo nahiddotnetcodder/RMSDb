@@ -46,7 +46,7 @@ namespace RMS.Models
         public virtual StoreUnit StoreUnits { get; private set; }
 
         [Required(ErrorMessage = "This Level is required")]
-        [Display(Name = "Re-Ordar Level")]
+        [Display(Name = "Re-Order Level")]
         public int SIGRLevel { get; set; }
 
         [MaxLength(250)]

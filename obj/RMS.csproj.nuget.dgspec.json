@@ -1,25 +1,20 @@
 {
   "format": 1,
   "restore": {
-    "E:\\Raj International\\Restaurant-main18\\Restaurant-main\\RMS.csproj": {}
+    "E:\\08-O4-2023 (Nahid)\\Restaurant-main\\RMS.csproj": {}
   },
   "projects": {
-    "E:\\Raj International\\Restaurant-main18\\Restaurant-main\\RMS.csproj": {
+    "E:\\08-O4-2023 (Nahid)\\Restaurant-main\\RMS.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "E:\\Raj International\\Restaurant-main18\\Restaurant-main\\RMS.csproj",
+        "projectUniqueName": "E:\\08-O4-2023 (Nahid)\\Restaurant-main\\RMS.csproj",
         "projectName": "RMS",
-        "projectPath": "E:\\Raj International\\Restaurant-main18\\Restaurant-main\\RMS.csproj",
-        "packagesPath": "C:\\Users\\nahid\\.nuget\\packages\\",
-        "outputPath": "E:\\Raj International\\Restaurant-main18\\Restaurant-main\\obj\\",
+        "projectPath": "E:\\08-O4-2023 (Nahid)\\Restaurant-main\\RMS.csproj",
+        "packagesPath": "C:\\Users\\User\\.nuget\\packages\\",
+        "outputPath": "E:\\08-O4-2023 (Nahid)\\Restaurant-main\\obj\\",
         "projectStyle": "PackageReference",
-        "fallbackFolders": [
-          "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages",
-          "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
-        ],
         "configFilePaths": [
-          "C:\\Users\\nahid\\AppData\\Roaming\\NuGet\\NuGet.Config",
-          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
+          "C:\\Users\\User\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
@@ -99,7 +94,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.100\\RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.102\\RuntimeIdentifierGraph.json"
         }
       }
     }

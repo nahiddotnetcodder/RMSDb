@@ -18,7 +18,6 @@ namespace RMS.Repositories
 
         public HREmpSalary Create(HREmpSalary hrsalary)
         {
-
             var salaryPolicy = _context.HRSalaryPolicy.ToList();
             var empName = _context.HREmpDetails.Where(x=>x.HREDId == hrsalary.HREDId).FirstOrDefault();
             if(empName != null)
@@ -33,6 +32,13 @@ namespace RMS.Repositories
                     }
                     hrsalary.HRSBasic = empName.HREDBasic;
                     hrsalary.HRSGTotal = empName.HREDBasic + sum;
+
+
+                    var currentUser = GetCurrentUser();
+                    hrsalary.HRSId = 0;
+                    hrsalary.CUser = currentUser.FullName;
+                    _context.HRSalary.Add(hrsalary);
+                    _context.SaveChanges();
                 }
             }
             else
@@ -49,15 +55,15 @@ namespace RMS.Repositories
                     hrsalary.HREDId = item.HREDId;
                     hrsalary.HRSBasic = item.HREDBasic;
                     hrsalary.HRSGTotal = item.HREDBasic + sum;
+
+
+                    var currentUser = GetCurrentUser();
+                    hrsalary.HRSId = 0;
+                    hrsalary.CUser = currentUser.FullName;
+                    _context.HRSalary.Add(hrsalary);
+                    _context.SaveChanges();
                 }
             }
-
-
-            var currentUser = GetCurrentUser();
-            hrsalary.HRSId = 0;
-            hrsalary.CUser = currentUser.FullName;
-            _context.HRSalary.Add(hrsalary);
-            _context.SaveChanges();
             return hrsalary;
         }
 

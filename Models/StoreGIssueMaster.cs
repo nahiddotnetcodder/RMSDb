@@ -40,7 +40,7 @@ namespace RMS.Models
         public string CUser { get; set; } 
         public DateTime CreateDate { get; set; } = DateTime.Now;
         [NotMapped]
-        public string Items { get; set; }
+        public string SGIItems { get; set; }
         public virtual List<StoreGIssueDetails> StoreGIssueDetails { get; set; }
     }
 }

@@ -1,0 +1,64 @@
+﻿@model RMS.Models.ResDClose
+
+
+<div class="row">
+    <div class="col-md-6 offset-3 dCloseForm">
+        <form asp-action="Index" >
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="col-12">
+                <div class="row">
+                    <div class="form-group col-7">
+                        <label asp-for="RDCDate" class="control-label" style="margin: 8px 0; font-size:20px"></label>
+                    </div>
+                    <div class="form-group col-5">
+                        <input asp-for="RDCDate" class="form-control" style="font-size: 30px; background: none; border: none" readonly />
+
+                    </div>
+                    <div class="form-group col-12">
+                        <input type="submit" value="Day Close" class="btn-primary btn-block dClose" id="dayclose"  />
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+    <script type="text/javascript">
+        $('#dayclose').on('click', function () {
+
+            var grmId = parseInt(this.id);
+            $.confirm({
+                title: 'Are you sure want to delete?',
+                content: 'You will not be able to recover this item.',
+                type: 'red',
+                buttons: {
+                    yes: {
+                        btnClass: 'btn-danger',
+                        keys: ['enter'],
+                        action: function () {
+                            $.ajax({
+                                type: "GET",
+                                url: "/StoreGReceive/Delete?id=" + grmId,
+                                data: "{}",
+                                success: function (response) {
+                                    if (response.success) {
+                                        getAllReceive();
+                                    }
+                                }
+                            });
+                        }
+                    },
+                    no: function () {
+                    }
+                }
+            });
+        });
+
+
+    </script>
+}
+
+

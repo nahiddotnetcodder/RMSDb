@@ -5,10 +5,10 @@ var allAccounts = [];
 var itemList = [];
 var itemCode = '';
 var ddlitemName = 0;
-var grdUnit = 0;
-var grdQty = 0;
-var grduPrice = 0;
-var grdtPrice = 0;
+var gidUnit = 0;
+var gidQty = 0;
+var giduPrice = 0;
+var gidtPrice = 0;
 
 $(".onlyNumber").change(function (e) {
     if (e.which != 8 && e.which != 0 && (e.which < 48 || e.which > 57)) {
@@ -73,7 +73,7 @@ function addItem() {
     if (result == false) { return; }
     var descriptionId = $("#ddlitemName option:selected").val();
     var selectedAccount = allAccounts.filter(x => x.id == Number(descriptionId))[0];
-    
+
     let objectItem = {
         itemCode: $("#itemCode").val(),
         itemDescriptionId: descriptionId,
@@ -210,10 +210,10 @@ function SaveRequest() {
     data.append('GIMId', 0);
     data.append('GIMDate', $('#gimDate').val());
     data.append('HRDId', $('#ddldeptName').val());
-    data.append('GIMRemarks', $('#gimRemarks').val()); 
+    data.append('GIMRemarks', $('#gimRemarks').val());
 
     var tablelength = $('#tGLPostingListbody tr').length;
-    for (var i = 0; i < tablelength -1; i++) {
+    for (var i = 0; i < tablelength - 1; i++) {
         itemList.push({
             gidId: Number($('#gidId' + i).val()) ?? 0,
             itemCode: $('#itemCode' + i).val(),
@@ -225,7 +225,7 @@ function SaveRequest() {
             gidtPrice: $('#gidtPrice' + i).val() ?? 0,
         });
     }
-    data.append('Items', JSON.stringify(itemList));
+    data.append('SGIItems', JSON.stringify(itemList));
 
     $.ajax({
         processData: false,
@@ -296,10 +296,11 @@ function getAllReceive() {
                         <td id="gimRemarks${rowJournalTableIdx}">` + items[i].gimRemarks + `</td>
                         <td class="text-center">
                             <button id="` + items[i].gimId + `" class="btn btn-sm btn-primary view" type="button">Details</button>
+                            <a class= "btn btn-sm btn-secondary" href='/StoreGIssue/Edit?id=` + items[i].gimId + `'>Edit</a>
+                            <button id="` + items[i].gimId + `" class="btn btn-sm btn-danger delete" type="button">Delete</button>
                         </td>
                     </tr>`
-                    //< a class= "btn btn-sm btn-secondary edit" href = '/StoreGIssue/Edit?id=` + items[i].gimId + `' > Edit</a >
-                    //<button id="` + items[i].gimId + `" class="btn btn-sm btn-danger delete" type="button">Delete</button>
+
                 );
             }
         }
@@ -309,9 +310,10 @@ function getAllReceive() {
 $('#tJournalListbody').on('click', '.view', function () {
     window.location = '/StoreGIssue/ItemDetails?id=' + $(this)[0].id;
 });
-$('#tGLPostingListbody').on('click', '.edit', function () {
+$('#tJournalListbody').on('click', '.edit', function () {
     window.location = '/StoreGIssue/Edit?id=' + $(this)[0].id;
 });
+
 $('.print').click(function () {
     $("#nonPrintArea").hide();
     $("#viewJournalModal").show();
@@ -320,78 +322,148 @@ $('.print').click(function () {
 function getForEdit() {
     var url = window.location.href;
     var id = url.substring(url.lastIndexOf('=') + 1);
+
     $.ajax({
         type: "GET",
         url: "/StoreGIssue/GetById?id=" + id,
         data: "{}",
         success: function (data) {
+            debugger
             allAccounts = data.allAccounts;
-            let items = data.items;
+            let items = data.storeGIssueDetails;
             rowIdx = 0;
             $('#tGLPostingListbody').empty();
             for (var i = 0; i < items.length; i++) {
-                $('#tGLPostingListbody').append(
-                    `<tr id="R${rowIdx}">
-                        <td hidden>
-                            <input type="text" class="form-control" id="gidId${rowIdx}" />
-                        </td>
-                        <td>
-                            <input type="text" class="form-control codeChangesFromRow" id="itemCode${rowIdx}" />
-                        </td>
-                        <td>
-                            <select class="form-control accountChangesFromRow autoSuggestionSelect" id="ddlitemName${rowIdx}"><option selected>` + items[i].itemDescriptionId + `</option></select>
-                        </td>
-                        <td>
-                            <input type="text" class="form-control numbersOnly" placeholder="0.00" id="unit${rowIdx}" />
-                        </td>
-                        <td>
-                            <input type="text" class="form-control numbersOnly" placeholder="0.00" id="gidQty${rowIdx}" />
-                        </td>
-                        <td>
-                            <input type="text" class="form-control numbersOnly" placeholder="0.00" id="giduPrice${rowIdx}" />
-                        </td>
-                        <td>
-                            <input type="text" class="form-control numbersOnly" placeholder="0.00" id="gidTPrice${rowIdx}" />
-                        </td>
-                        <td class="text-center">
+                $('#tGLPostingListbody').append(`
+                <tr id="R${rowIdx}">
+                    <td hidden>
+                        <input type="text" class="form-control" id="gidId${rowIdx}" />
+                    </td>
+                    <td>
+                        <input type="text" class="form-control codeChangesFromRow" id="itemCode${rowIdx}" />
+                    </td>
+                    <td>
+                        <select class="form-control accountChangesFromRow autoSuggestionSelect" id="ddlitemName${rowIdx}"></select>
+                    </td>
+                    <td>
+                        <input type="text" class="form-control numbersOnly" placeholder="0.00" id="unit${rowIdx}" readonly/>
+                    </td>
+                    <td>
+                        <input type="text" class="form-control numbersOnly" placeholder="0.00" id="gidQty${rowIdx}" />
+                    </td>
+                    <td>
+                        <input type="text" class="form-control numbersOnly" placeholder="0.00" id="giduPrice${rowIdx}" />
+                    </td>
+                    <td>
+                        <input type="text" class="form-control numbersOnly" placeholder="0.00" id="gidtPrice${rowIdx}" />
+                    </td>
+                    <td class="text-center">
                         <div id="addItem${rowIdx}" class="row">
                             <a style="cursor:pointer" class="btn btn-primary add"><i class="bi bi-plus-circle"></i>add</a>
                         </div>
-                            <div id="updateItem${rowIdx}" class="row">
-                                <button style='margin-left:2px' class="btn btn-sm  edit" type="button"><i class="fa-solid fa-pencil text-success" aria-hidden="true" title="Edit"></i></button>
-                                <button style='margin-left:2px' class="btn btn-sm  remove" type="button"><i class="fa-solid fa-xmark text-danger" aria-hidden="true" title="Delete"></i></button>
-                            </div>
-                            <div id="saveAsUpdatedItem${rowIdx}" class="row">
-                                <button style='margin-left:2px' class="btn btn-sm  sav" type="button"><i class="fa-solid fa-check text-success" aria-hidden="true" title="save"></i></button>
-                                <button style='margin-left:2px' class="btn btn-sm  can" type="button"><i class="fa-solid fa-xmark text-success" aria-hidden="true" title="cancel"></i></button>
-                            </div>
-                        </td>
-                    </tr>`
-                );
+                        <div id="updateItem${rowIdx}" class="row" style="flex-wrap:nowrap">
+                            <button style='margin-left:2px' class="btn btn-sm  edit" type="button"><i class="fa-solid fa-pencil text-success" aria-hidden="true" title="Edit"></i></button>
+                            <button style='margin-left:2px' class="btn btn-sm  remove" type="button"><i class="fa-solid fa-xmark text-danger" aria-hidden="true" title="Delete"></i></button>
+                        </div>
+                        <div id="saveAsUpdatedItem${rowIdx}" class="row" style="flex-wrap:nowrap">
+                            <button style='margin-left:2px' class="btn btn-sm  sav" type="button"><i class="fa-solid fa-check text-success" aria-hidden="true" title="save"></i></button>
+                            <button style='margin-left:2px' class="btn btn-sm  can" type="button"><i class="fa-solid fa-xmark text-success" aria-hidden="true" title="cancel"></i></button>
+                        </div>
+                    </td>
+                </tr>`);
+                getAllIssueFromDB(rowIdx);
+                //$('.autoSuggestionSelect').css('width', '100%');
+                //$(".autoSuggestionSelect").select2({});
+                $("#gidId" + rowIdx).val(items[i].gidId);
+                $("#itemCode" + rowIdx).val(items[i].itemCode);
+                $("#ddlitemName" + rowIdx).val(items[i].itemName);
+                $("#ddlitemName" + rowIdx).change();
+                $("#unit" + rowIdx).val(items[i].unit);
+                $("#gidQty" + rowIdx).val(items[i].gidQty);
+                $("#giduPrice" + rowIdx).val(items[i].giduPrice);
+                $("#gidtPrice" + rowIdx).val(items[i].gidtPrice);
+
+                $("#itemCode" + rowIdx).prop('disabled', true);
+                $("#ddlitemName" + rowIdx).prop('disabled', true);
+                $("#unit" + rowIdx).prop('disabled', true);
+                $("#gidQty" + rowIdx).prop('disabled', true);
+                $("#giduPrice" + rowIdx).prop('disabled', true);
+                $("#gidtPrice" + rowIdx).prop('disabled', true);
+
+                $("#addItem" + rowIdx).hide();
+                $("#updateItem" + rowIdx).show();
+                $("#saveAsUpdatedItem" + rowIdx).hide();
+
+                rowIdx += 1;
+            }
+            addFirstRow(rowIdx);
+        }
+    });
+}
+function getDescriptionDD() {
+    $.ajax({
+        type: "GET",
+        url: "/StoreGIssue/GetInitData",
+        success: function (response) {
+            if (response != null) {
+                var deptDetails = response.deptDetails;
+                var accounts = response.chartMasterDD;
+                allAccounts = response.chartMasterDD;
+                var subGroups = response.chartTypeDD;
+                $('#ddlitemName').empty();
+                $('#ddlitemName').append(new Option("--Select Item Name--", -1))
+
+                $('#ddldeptName').append(new Option("--Select Department Name--", -1))
+                for (var i = 0; i < deptDetails.length; i++) {
+                    var option = new Option(deptDetails[i].name, deptDetails[i].id);
+                    $(option).html(deptDetails[i].name);
+                    $("#ddldeptName").append(option);
+                }
+
+                for (var i = 0; i < subGroups.length; i++) {
+                    var optgroup = "<optgroup label='" + subGroups[i].name + "'>";
+                    var data = accounts.filter(x => x.accountGroupId == subGroups[i].id);
+                    for (var j = 0; j < data.length; j++) {
+                        optgroup += "<option value='" + data[j].id + "'>" + data[j].name + "</option>"
+                    }
+                    optgroup += "</optgroup>";
+                    $("#ddlitemName").append(optgroup);
+                }
             }
         }
     });
 }
-$('#updateButton').click(function () {
 
-    data.append('GIMId', 0);
+$('#updateButton').click(function () {
+    debugger
+    var result = validationCheck();
+    if (result == false) { return; }
+
+    var data = new FormData();
+    data.append('GIMId', $('#gimId').val());
     data.append('GIMDate', $('#gimDate').val());
     data.append('HRDId', $('#ddldeptName').val());
     data.append('GIMRemarks', $('#gimRemarks').val());
 
     var tablelength = $('#tGLPostingListbody tr').length;
-    for (var i = 1; i <= tablelength; i++) {
+    for (var i = 0; i < tablelength - 1; i++) {
+        var descId = $('#ddlitemName' + i).find(":selected").val();
+        var desc = $('#ddlitemName' + i).find(":selected").text();
+        if (descId == desc) {
+            descId = allAccounts.filter(x => x.name == desc)[0].id;
+        }
         itemList.push({
-            gidId: $('#gidId' + i).text(),
-            itemCode: $('#itemCode' + i).text(),
-            itemDescription: $('#itemName' + i).text(),
-            unit: $('#unit' + i).text(),
-            gidQty: $('#gidQty' + i).text(),
-            giduPrice: $('#giduPrice' + i).text(),
-            gidtPrice: $('#gidtPrice' + i).text()
+            gidId: Number($('#gidId' + i).val()) ?? 0,
+            itemCode: $('#itemCode' + i).val(),
+            itemDescriptionId: descId,
+            itemName: $('#ddlitemName' + i).find(":selected").text(),
+            unit: $('#unit' + i).val(),
+            gidQty: $('#gidQty' + i).val() ?? 0,
+            giduPrice: $('#giduPrice' + i).val() ?? 0,
+            gidtPrice: $('#gidtPrice' + i).val() ?? 0,
         });
     }
-    data.append('Items', JSON.stringify(itemList));
+    data.append('SGIItems', JSON.stringify(itemList));
 
     $.ajax({
         processData: false,
@@ -474,7 +546,7 @@ function getAllIssueFromDB(parameter) {
                 for (var j = 0; j < data.length; j++) {
                     optgroup += "<option value='" + data[j].id + "'>" + data[j].name + "</option>"
                 }
-                 "</optgroup>";
+                "</optgroup>";
                 $("#ddlitemName" + parameter).append(optgroup);
             }
         }
@@ -484,7 +556,7 @@ function getAllIssueFromDB(parameter) {
 $('#tGLPostingListbody').on('change',
     '.accountChangesFromRow',
     function () {
-        let getDomId = $(this).attr('id'); 
+        let getDomId = $(this).attr('id');
         var rowTrackId = getDomId.slice(11);
         var value = $("#ddlitemName" + rowTrackId).val();
         if (value != null) {
@@ -525,6 +597,7 @@ $('#tGLPostingListbody').on('click', '.add', function () {
 
     let getDomId = $(this).closest('tr').attr('id');
     rowIdx = parseInt(getDomId.slice(1));
+
     var gidQty = $("#gidQty" + rowIdx).val();
     var giduPrice = $("#giduPrice" + rowIdx).val();
     if (Number(gidQty) == '' || Number(gidQty) == undefined) {
@@ -549,7 +622,7 @@ $('#tGLPostingListbody').on('click', '.add', function () {
                 <select class="form-control accountChangesFromRow autoSuggestionSelect" id="ddlitemName${rowIdx}"></select>
             </td>
             <td>
-                <input type="text" class="form-control accountChangesFromRow" placeholder="0.00" id="unit${rowIdx}" />
+                <input type="text" class="form-control accountChangesFromRow" placeholder="0.00" id="unit${rowIdx}" readonly/>
             </td>
             <td>
                 <input type="text" class="form-control numbersOnly" placeholder="0.00" id="gidQty${rowIdx}" />
@@ -564,11 +637,11 @@ $('#tGLPostingListbody').on('click', '.add', function () {
                 <div id="addItem${rowIdx}" class="row">
                     <a style="cursor:pointer" class="btn btn-primary add"><i class="bi bi-plus-circle"></i>add</a>
                 </div>
-                <div id="updateItem${rowIdx}" class="row">
+                <div id="updateItem${rowIdx}" class="row" style="flex-wrap:nowrap">
                     <button style='margin-left:2px' class="btn btn-sm  edit" type="button"><i class="fa-solid fa-pencil text-success" aria-hidden="true" title="Edit"></i></button>
                     <button style='margin-left:2px' class="btn btn-sm  remove" type="button"><i class="fa-solid fa-xmark text-danger" aria-hidden="true" title="Delete"></i></button>
                 </div>
-                <div id="saveAsUpdatedItem${rowIdx}" class="row">
+                <div id="saveAsUpdatedItem${rowIdx}" class="row" style="flex-wrap:nowrap">
                     <button style='margin-left:2px' class="btn btn-sm  sav" type="button"><i class="fa-solid fa-check text-success" aria-hidden="true" title="save"></i></button>
                     <button style='margin-left:2px' class="btn btn-sm  can" type="button"><i class="fa-solid fa-xmark text-success" aria-hidden="true" title="cancel"></i></button>
                 </div>
@@ -617,14 +690,14 @@ $('#tGLPostingListbody').on('click', '.remove', function () {
 $('#tGLPostingListbody').on('click', '.sav', function () {
     let getDomId = $(this).closest('tr').attr('id');
     rowIdx = parseInt(getDomId.slice(1));
-        $("#itemCode" + rowIdx).prop('disabled', false);
-        $("#ddlitemName" + rowIdx).prop('disabled', false);
-        $("#unit" + rowIdx).prop('disabled', false);
-        $("#gidQty" + rowIdx).prop('disabled', false);
-        $("#giduPrice" + rowIdx).prop('disabled', false);
-        $("#gidtPrice" + rowIdx).prop('disabled', false);
-        $("#updateItem" + rowIdx).show();
-        $("#saveAsUpdatedItem" + rowIdx).hide();
+    $("#itemCode" + rowIdx).prop('disabled', true);
+    $("#ddlitemName" + rowIdx).prop('disabled', true);
+    $("#unit" + rowIdx).prop('disabled', true);
+    $("#gidQty" + rowIdx).prop('disabled', true);
+    $("#giduPrice" + rowIdx).prop('disabled', true);
+    $("#gidtPrice" + rowIdx).prop('disabled', true);
+    $("#updateItem" + rowIdx).show();
+    $("#saveAsUpdatedItem" + rowIdx).hide();
 });
 $('#tGLPostingListbody').on('click', '.can', function () {
     let getDomId = $(this).closest('tr').attr('id');
@@ -647,7 +720,7 @@ $('#tGLPostingListbody').on('click', '.can', function () {
     $("#updateItem" + rowIdx).show();
     $("#saveAsUpdatedItem" + rowIdx).hide();
 });
-function addFirstRow(id) {    
+function addFirstRow(id) {
     rowIdx = Number(id);
     $('#tGLPostingListbody').append(`
     <tr id="R${rowIdx}">
@@ -661,7 +734,7 @@ function addFirstRow(id) {
             <select class="form-control accountChangesFromRow autoSuggestionSelect" id="ddlitemName${rowIdx}"></select>
         </td>
         <td>
-            <input type="text" class="form-control numbersOnly" placeholder="0.00" id="unit${rowIdx}" />
+            <input type="text" class="form-control numbersOnly" placeholder="0.00" id="unit${rowIdx}" readonly/>
         </td>
         <td>
             <input type="text" class="form-control numbersOnly" placeholder="0.00" id="gidQty${rowIdx}" />
@@ -676,11 +749,11 @@ function addFirstRow(id) {
             <div id="addItem${rowIdx}" class="row">
                 <a style="cursor:pointer" class="btn btn-primary add"><i class="bi bi-plus-circle"></i>add</a>
             </div>
-            <div id="updateItem${rowIdx}" class="row">
+            <div id="updateItem${rowIdx}" class="row" style="flex-wrap:nowrap">
                 <button style='margin-left:2px' class="btn btn-sm  edit" type="button"><i class="fa-solid fa-pencil text-success" aria-hidden="true" title="Edit"></i></button>
                 <button style='margin-left:2px' class="btn btn-sm  remove" type="button"><i class="fa-solid fa-xmark text-danger" aria-hidden="true" title="Delete"></i></button>
             </div>
-            <div id="saveAsUpdatedItem${rowIdx}" class="row">
+            <div id="saveAsUpdatedItem${rowIdx}" class="row" style="flex-wrap:nowrap">
                 <button style='margin-left:2px' class="btn btn-sm  sav" type="button"><i class="fa-solid fa-check text-success" aria-hidden="true" title="save"></i></button>
                 <button style='margin-left:2px' class="btn btn-sm  can" type="button"><i class="fa-solid fa-xmark text-success" aria-hidden="true" title="cancel"></i></button>
             </div>

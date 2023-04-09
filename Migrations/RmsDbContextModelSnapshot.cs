@@ -1121,6 +1121,91 @@ namespace RMS.Migrations
                     b.ToTable("MenuPermissions");
                 });
 
+            modelBuilder.Entity("RMS.Models.RecMDetails", b =>
+                {
+                    b.Property<int>("RMDId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("RMDId"), 1L, 1);
+
+                    b.Property<int>("RMDQty")
+                        .HasColumnType("int");
+
+                    b.Property<int>("RMMId")
+                        .HasColumnType("int");
+
+                    b.Property<float>("SGSUPrice")
+                        .HasColumnType("real");
+
+                    b.Property<string>("SIGItemCode")
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<string>("SIGItemName")
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<string>("SIGUnit")
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.HasKey("RMDId");
+
+                    b.HasIndex("RMMId");
+
+                    b.ToTable("RecMDetails");
+                });
+
+            modelBuilder.Entity("RMS.Models.RecMMaster", b =>
+                {
+                    b.Property<int>("RMMId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("RMMId"), 1L, 1);
+
+                    b.Property<string>("CUser")
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<DateTime>("CreateDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("RMItemCode")
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<string>("RMItemName")
+                        .HasMaxLength(250)
+                        .HasColumnType("nvarchar(250)");
+
+                    b.HasKey("RMMId");
+
+                    b.ToTable("RecMMaster");
+                });
+
+            modelBuilder.Entity("RMS.Models.ResDClose", b =>
+                {
+                    b.Property<int>("RDCId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("RDCId"), 1L, 1);
+
+                    b.Property<string>("CUser")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<DateTime>("RDCDate")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("RDCId");
+
+                    b.ToTable("ResDClose");
+                });
+
             modelBuilder.Entity("RMS.Models.ResFoodType", b =>
                 {
                     b.Property<int>("RFTId")
@@ -1257,6 +1342,94 @@ namespace RMS.Migrations
                     b.ToTable("ResMenu");
                 });
 
+            modelBuilder.Entity("RMS.Models.ResSalesDetails", b =>
+                {
+                    b.Property<int>("RSDId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("RSDId"), 1L, 1);
+
+                    b.Property<bool>("IsCancel")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("RSDItemCode")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("RSDItemName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int?>("RSDKotNo")
+                        .HasColumnType("int");
+
+                    b.Property<int>("RSDQty")
+                        .HasColumnType("int");
+
+                    b.Property<double>("RSDTotalPrice")
+                        .HasColumnType("float");
+
+                    b.Property<double>("RSDUPrice")
+                        .HasColumnType("float");
+
+                    b.Property<int>("RSMId")
+                        .HasColumnType("int");
+
+                    b.HasKey("RSDId");
+
+                    b.HasIndex("RSMId");
+
+                    b.ToTable("ResSalesDetails");
+                });
+
+            modelBuilder.Entity("RMS.Models.ResSalesMaster", b =>
+                {
+                    b.Property<int>("RSMId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("RSMId"), 1L, 1);
+
+                    b.Property<string>("CUser")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<DateTime>("CreateDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("HREDId")
+                        .HasColumnType("int");
+
+                    b.Property<bool>("IsBPaid")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsBPrint")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime>("RDCDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("RDCId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("RSMPerson")
+                        .HasColumnType("int");
+
+                    b.Property<string>("RSMTableNo")
+                        .IsRequired()
+                        .HasMaxLength(10)
+                        .HasColumnType("nvarchar(10)");
+
+                    b.Property<int>("RSMTime")
+                        .HasColumnType("int");
+
+                    b.HasKey("RSMId");
+
+                    b.HasIndex("HREDId");
+
+                    b.ToTable("ResSalesMaster");
+                });
+
             modelBuilder.Entity("RMS.Models.ResTable", b =>
                 {
                     b.Property<int>("RTId")
@@ -1284,70 +1457,6 @@ namespace RMS.Migrations
                     b.HasKey("RTId");
 
                     b.ToTable("ResTable");
-                });
-
-            modelBuilder.Entity("RMS.Models.RMDetails", b =>
-                {
-                    b.Property<int>("RMDId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("RMDId"), 1L, 1);
-
-                    b.Property<int>("RMDQty")
-                        .HasColumnType("int");
-
-                    b.Property<int>("RMMId")
-                        .HasColumnType("int");
-
-                    b.Property<float>("SGSUPrice")
-                        .HasColumnType("real");
-
-                    b.Property<string>("SIGItemCode")
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
-
-                    b.Property<string>("SIGItemName")
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
-
-                    b.Property<string>("SIGUnit")
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
-
-                    b.HasKey("RMDId");
-
-                    b.HasIndex("RMMId");
-
-                    b.ToTable("RMDetails");
-                });
-
-            modelBuilder.Entity("RMS.Models.RMMaster", b =>
-                {
-                    b.Property<int>("RMMId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("RMMId"), 1L, 1);
-
-                    b.Property<string>("CUser")
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
-
-                    b.Property<DateTime>("CreateDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("RMItemCode")
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
-
-                    b.Property<string>("RMItemName")
-                        .HasMaxLength(250)
-                        .HasColumnType("nvarchar(250)");
-
-                    b.HasKey("RMMId");
-
-                    b.ToTable("RMMaster");
                 });
 
             modelBuilder.Entity("RMS.Models.StoreCategory", b =>
@@ -1928,6 +2037,17 @@ namespace RMS.Migrations
                     b.Navigation("MenuItem");
                 });
 
+            modelBuilder.Entity("RMS.Models.RecMDetails", b =>
+                {
+                    b.HasOne("RMS.Models.RecMMaster", "RMMaster")
+                        .WithMany("RecMDetails")
+                        .HasForeignKey("RMMId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("RMMaster");
+                });
+
             modelBuilder.Entity("RMS.Models.ResMenu", b =>
                 {
                     b.HasOne("RMS.Models.ResFoodType", "ResFtype")
@@ -1947,15 +2067,26 @@ namespace RMS.Migrations
                     b.Navigation("ResKInfo");
                 });
 
-            modelBuilder.Entity("RMS.Models.RMDetails", b =>
+            modelBuilder.Entity("RMS.Models.ResSalesDetails", b =>
                 {
-                    b.HasOne("RMS.Models.RMMaster", "RMMaster")
-                        .WithMany("RMDetails")
-                        .HasForeignKey("RMMId")
+                    b.HasOne("RMS.Models.ResSalesMaster", "ResSalesMaster")
+                        .WithMany("ResSalesDetails")
+                        .HasForeignKey("RSMId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("RMMaster");
+                    b.Navigation("ResSalesMaster");
+                });
+
+            modelBuilder.Entity("RMS.Models.ResSalesMaster", b =>
+                {
+                    b.HasOne("RMS.Models.HREmpDetails", "HREmpDetails")
+                        .WithMany()
+                        .HasForeignKey("HREDId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("HREmpDetails");
                 });
 
             modelBuilder.Entity("RMS.Models.StoreGIssueDetails", b =>
@@ -2061,9 +2192,14 @@ namespace RMS.Migrations
                     b.Navigation("HRLPName");
                 });
 
-            modelBuilder.Entity("RMS.Models.RMMaster", b =>
+            modelBuilder.Entity("RMS.Models.RecMMaster", b =>
                 {
-                    b.Navigation("RMDetails");
+                    b.Navigation("RecMDetails");
+                });
+
+            modelBuilder.Entity("RMS.Models.ResSalesMaster", b =>
+                {
+                    b.Navigation("ResSalesDetails");
                 });
 
             modelBuilder.Entity("RMS.Models.StoreGIssueMaster", b =>

@@ -49,16 +49,13 @@ namespace RMS.Repositories
         public async Task<ResponseStatus> Update(HRDesignation model)
         {
             var status = new ResponseStatus();
-
-            var allData = await _context.HRDesignation.Where(x => x.HRDeName == model.HRDeName ).ToListAsync();
-            if (allData.Count > 0)
+            if(IsItemExists(model.HRDeName, model.HRDeId) == true)
             {
                 status.StatusCode = 0;
-                status.Message = "Designation Name already exists";
+                status.Message = "Designation Name already Exit";
                 return status;
             }
             var data = await _context.HRDesignation.Where(x => x.HRDeId == model.HRDeId).FirstOrDefaultAsync();
-
             data.HRDeId = model.HRDeId;
             data.HRDeName = model.HRDeName;
             data.HRDeDes = model.HRDeDes == null ? string.Empty : model.HRDeDes;

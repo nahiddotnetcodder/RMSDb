@@ -49,12 +49,10 @@ namespace RMS.Repositories
         public async Task<ResponseStatus> Update(ResTable model)
         {
             var status = new ResponseStatus();
-
-            var allData = await _context.ResTable.Where(x => x.RTNumber == model.RTNumber ).ToListAsync();
-            if (allData.Count > 0)
+            if (IsItemExists(model.RTNumber, model.RTId) == true)
             {
                 status.StatusCode = 0;
-                status.Message = "Record already exists";
+                status.Message = "Table Number already Exit";
                 return status;
             }
             var data = await _context.ResTable.Where(x => x.RTId == model.RTId).FirstOrDefaultAsync();

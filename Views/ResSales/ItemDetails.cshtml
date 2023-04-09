@@ -1,0 +1,81 @@
+﻿@{
+
+}
+<div class="container p-3">
+    <div class="container">
+        <br>
+        <table class="table table-bordered table-striped">
+            <thead>
+                <tr>
+                    <th>Date</th>
+                    <th>Waiter</th>
+                    <th>Table No</th>
+                    <th>Person</th>
+                </tr>
+            </thead>
+            <tbody id="SalesDetails"></tbody>
+        </table>
+        <table class="table table-sm table-hover table-bordered">
+            <thead class="dark-mode">
+                <tr style="background:#21909F;">
+                    <th class="text-center" scope="col">Item Code</th>
+                    <th class="text-center" scope="col">Item Name</th>
+                    <th class="text-center" scope="col">Unit Price</th>
+                    <th class="text-center" scope="col">Quantity</th>
+                    <th class="text-center" scope="col">Total Price</th>
+                    <th class="text-center" scope="col">Kot No</th>
+                </tr>
+            </thead>
+            <tbody id="tSalePostingDetails" class="text-center">
+            </tbody>
+        </table>
+        <div class="pt-3">
+            <button type="button" class="btn btn-primary print">Print</button>
+            <a type="button" class="btn btn-secondary" asp-controller="ResSales" asp-action="masterDetails">Back</a>
+        </div>
+    </div>
+
+</div>
+@section Scripts{
+<script src="~/js/resSales.js"></script>
+    <script>
+        $(document).ready(function () {
+
+            var url = window.location.href;
+            var id = url.substring(url.lastIndexOf('=') + 1);
+
+            $.ajax({
+                type: "GET",
+                url: "/ResSales/GetById?id=" + id,
+                data: "{}",
+                success: function (data) {
+                    let resSalesDetails = data.resSalesDetails;
+                    $('#SalesDetails').empty();
+                    $('#SalesDetails').append(
+                        `<tr>
+                            <td>` + data.rdcDateString + `</td>
+                            <td>` + data.hrEmpDetailsName + `</td>
+                            <td>` + data.rsmTableNo + `</td>
+                            <td>` + data.rsmPerson + `</td>
+                        </tr>`
+                    );
+
+                    $('#tSalePostingDetails').empty();
+                    for (var i = 0; i < resSalesDetails.length; i++) {
+                        $('#tSalePostingDetails').append(
+                            `<tr id="Item${++rowTableIdx}">
+                                <td hidden id="rsdId${rowTableIdx}">` + resSalesDetails[i].rsdId + `</td>
+                                <td id="rsdItemCode${rowTableIdx}">` + resSalesDetails[i].rsdItemCode + `</td>
+                                <td id="rsdItemName${rowTableIdx}">` + resSalesDetails[i].rsdItemName + `</td>
+                                <td id="rsduPrice${rowTableIdx}">` + resSalesDetails[i].rsduPrice + `</td>
+                                <td id="rsdQty${rowTableIdx}">` + resSalesDetails[i].rsdQty + `</td>
+                                <td id="rsdTotalPrice${rowTableIdx}">` + resSalesDetails[i].rsdTotalPrice + `</td>
+                                <td id="rsdKotNo${rowTableIdx}">` + resSalesDetails[i].rsdKotNo + `</td>
+                            </tr>`
+                        );
+                    }
+                }
+            });
+        });
+    </script>
+}

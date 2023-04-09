@@ -400,6 +400,7 @@ function getJournalForEdit() {
         success: function (data) {
             allAccounts = data.allAccounts;
             let items = data.items;
+            debugger
             rowIdx = 0;
             $('#tGLPostingListbody').empty();
             for (var i = 0; i < items.length; i++) {
@@ -409,10 +410,10 @@ function getJournalForEdit() {
                         <input type="text" class="form-control-sm" id="agtId${rowIdx}" />
                     </td>
                     <td>
-                        <input type="text" class="form-control-sm" id="agtAccCode${rowIdx}" />
+                        <input type="text" class="form-control-sm codeChangesFromRow" id="agtAccCode${rowIdx}" />
                     </td>
                     <td>
-                        <select class="form-control-sm accountChangesFromRow autoSuggestionSelect" id="ddlAGTAccDescription${rowIdx}"><option selected>` + items[i].agtAccDescriptionId + `</option></select>
+                        <select class="form-control-sm accountChangesFromRow autoSuggestionSelect" id="ddlAGTAccDescription${rowIdx}"><option selected>` + items[i].agtAccDescription + `</option></select>
                     </td>
                     <td>
                         <input type="text" class="form-control-sm numbersOnly" placeholder="0.00" id="agtDebitAccount${rowIdx}" />
@@ -427,20 +428,19 @@ function getJournalForEdit() {
                         <div id="addItem${rowIdx}" class="row">
                             <a style="cursor:pointer" class="btn btn-primary add"><i class="bi bi-plus-circle"></i>add</a>
                         </div>
-                        <div id="updateItem${rowIdx}" class="row">
-                            <button style='margin-left:2px' class="btn btn-primary edit" type="button"><i class="fa fa-edit" aria-hidden="true"></i>upd</button>
-                            <button style='margin-left:2px' class="btn btn-danger remove" type="button"><i class="fa fa-trash" aria-hidden="true"></i>del</button>
+                        <div id="updateItem${rowIdx}" class="row"  style="flex-wrap:nowrap">
+                            <button style='margin-left:2px' class="btn btn  edit" type="button"><i class="fa-solid fa-pencil text-success" aria-hidden="true" title="Edit"></i></button>
+                            <button style='margin-left:2px' class="btn btn  remove" type="button"><i class="fa-solid fa-xmark text-danger" aria-hidden="true" title="Delete"></i></button>
                         </div>
-                        <div id="saveAsUpdatedItem${rowIdx}" class="row">
-                            <button style='margin-left:2px' class="btn btn-primary sav" type="button"><i class="fa fa-edit" aria-hidden="true"></i>sav</button>
-                            <button style='margin-left:2px' class="btn btn-danger can" type="button"><i class="fa fa-trash" aria-hidden="true"></i>can</button>
+                        <div id="saveAsUpdatedItem${rowIdx}" class="row"  style="flex-wrap:nowrap">
+                            <button style='margin-left:2px' class="btn btn  sav" type="button"><i class="fa-solid fa-check text-success" aria-hidden="true" title="save"></i></button>
+                            <button style='margin-left:2px' class="btn btn  can" type="button"><i class="fa-solid fa-xmark text-success" aria-hidden="true" title="cancel"></i></button>
                         </div>
                     </td>
                 </tr>`);
                 getAllAccountFromDB(rowIdx);
                 //$('.autoSuggestionSelect').css('width', '100%');
                 //$(".autoSuggestionSelect").select2({});
-
                 $("#agtId" + rowIdx).val(items[i].agtId);
                 $("#agtAccCode" + rowIdx).val(items[i].agtAccCode);
                 $("#ddlAGTAccDescription" + rowIdx).val(items[i].agtAccDescriptionId);
@@ -511,10 +511,15 @@ $('#updateButton').click(function () {
 
     var tablelength = $('#tGLPostingListbody tr').length;
     for (var i = 0; i < tablelength - 1; i++) {
+        var descId = $('#ddlAGTAccDescription' + i).find(":selected").val();
+        var desc = $('#ddlAGTAccDescription' + i).find(":selected").text();
+        if (descId == desc) {
+            descId = allAccounts.filter(x => x.name == desc)[0].id;
+        }
         itemList.push({
             agtId: Number($('#agtId' + i).val()) ?? 0,
             agtAccCode: $('#agtAccCode' + i).val(),
-            agtAccDescriptionId: $('#ddlAGTAccDescription' + i).find(":selected").val(),
+            agtAccDescriptionId: descId,
             agtAccDescription: $('#ddlAGTAccDescription' + i).find(":selected").text(),
             agtDebitAccount: $('#agtDebitAccount' + i).val() ?? 0,
             agtCreditAccount: $('#agtCreditAccount' + i).val() ?? 0,
@@ -592,7 +597,7 @@ function getAllAccountFromDB(parameter) {
         data: "{}",
         success: function (response) {
             var accounts = response.chartMasterDD;
-            var subGroups = response.chartTypeDD; debugger
+            var subGroups = response.chartTypeDD; 
 
             var o = new Option("Select Account", "-1");
             $(o).html("Please Select Account");
@@ -682,16 +687,16 @@ $('#tGLPostingListbody').on('click', '.add', function () {
                     <input type="text" class="form-control" id="agtMemo${rowIdx}" />
                 </td>
                 <td class="text-center">
-                    <div id="addItem${rowIdx}" class="row">
+                    <div id="addItem${rowIdx}" class="row" >
                         <a style="cursor:pointer" class="btn btn-primary add"><i class="bi bi-plus-circle"></i>add</a>
                     </div>
-                    <div id="updateItem${rowIdx}" class="row">
-                        <button style='margin-left:2px' class="btn btn-sm  edit" type="button"><i class="fa-solid fa-pencil text-success" aria-hidden="true" title="Edit"></i></button>
-                        <button style='margin-left:2px' class="btn btn-sm  remove" type="button"><i class="fa-solid fa-xmark text-danger" aria-hidden="true" title="Delete"></i></button>
+                    <div id="updateItem${rowIdx}" class="row"  style="flex-wrap:nowrap">
+                        <button style='margin-left:2px' class="btn btn  edit" type="button"><i class="fa-solid fa-pencil text-success" aria-hidden="true" title="Edit"></i></button>
+                        <button style='margin-left:2px' class="btn btn remove" type="button"><i class="fa-solid fa-xmark text-danger" aria-hidden="true" title="Delete"></i></button>
                     </div>
-                    <div id="saveAsUpdatedItem${rowIdx}" class="row">
-                       <button style='margin-left:2px' class="btn btn-sm  sav" type="button"><i class="fa-solid fa-check text-success" aria-hidden="true" title="save"></i></button>
-                       <button style='margin-left:2px' class="btn btn-sm  can" type="button"><i class="fa-solid fa-xmark text-success" aria-hidden="true" title="cancel"></i></button>
+                    <div id="saveAsUpdatedItem${rowIdx}" class="row"  style="flex-wrap:nowrap">
+                       <button style='margin-left:2px' class="btn btn  sav" type="button"><i class="fa-solid fa-check text-success" aria-hidden="true" title="save"></i></button>
+                       <button style='margin-left:2px' class="btn btn  can" type="button"><i class="fa-solid fa-xmark text-success" aria-hidden="true" title="cancel"></i></button>
                     </div>
                 </td>
             </tr>`);
@@ -712,6 +717,7 @@ $('#tGLPostingListbody').on('click', '.add', function () {
     }
 });
 $('#tGLPostingListbody').on('click', '.edit', function () {
+    debugger
     let getDomId = $(this).closest('tr').attr('id');
     rowIdx = parseInt(getDomId.slice(1));
 
@@ -801,13 +807,13 @@ function addFirstRow(id) {
             <div id="addItem${rowIdx}" class="row">
                 <a style="cursor:pointer" class="btn btn-primary add"><i class="bi bi-plus-circle"></i>add</a>
             </div>
-            <div id="updateItem${rowIdx}" class="row">
-                <button style='margin-left:2px' class="btn btn-sm  edit" type="button"><i class="fa-solid fa-pencil text-success" aria-hidden="true" title="Edit"></i></button>
-                <button style='margin-left:2px' class="btn btn-sm  remove" type="button"><i class="fa-solid fa-xmark text-danger" aria-hidden="true" title="Delete"></i></button>
+            <div id="updateItem${rowIdx}" class="row"  style="flex-wrap:nowrap">
+                <button style='margin-left:2px' class="btn btn  edit" type="button"><i class="fa-solid fa-pencil text-success" aria-hidden="true" title="Edit"></i></button>
+                <button style='margin-left:2px' class="btn btn  remove" type="button"><i class="fa-solid fa-xmark text-danger" aria-hidden="true" title="Delete"></i></button>
             </div>
-            <div id="saveAsUpdatedItem${rowIdx}" class="row">
-                <button style='margin-left:2px' class="btn btn-sm  sav" type="button"><i class="fa-solid fa-check text-success" aria-hidden="true" title="save"></i></button>
-                <button style='margin-left:2px' class="btn btn-sm  can" type="button"><i class="fa-solid fa-xmark text-success" aria-hidden="true" title="cancel"></i></button>
+            <div id="saveAsUpdatedItem${rowIdx}" class="row"  style="flex-wrap:nowrap">
+                <button style='margin-left:2px' class="btn btn  sav" type="button"><i class="fa-solid fa-check text-success" aria-hidden="true" title="save"></i></button>
+                <button style='margin-left:2px' class="btn btn  can" type="button"><i class="fa-solid fa-xmark text-success" aria-hidden="true" title="cancel"></i></button>
             </div>
         </td>
     </tr>`); 
